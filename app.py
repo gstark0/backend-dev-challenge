@@ -42,7 +42,11 @@ def add(url_id=None):
 
 			cur = conn.cursor()
 			if url_id is None:
-				cur.execute('SELECT product_id, title, price, inventory_count FROM products')
+				available = str(request.args.get('available')).lower()
+				if available == 'true' or available == '1':
+					cur.execute('SELECT product_id, title, price, inventory_count FROM products WHERE inventory_count > 0')
+				else:
+					cur.execute('SELECT product_id, title, price, inventory_count FROM products')
 				items = cur.fetchall()
 			else:
 				cur.execute('SELECT product_id, title, price, inventory_count FROM products WHERE product_id=?', (url_id,))
