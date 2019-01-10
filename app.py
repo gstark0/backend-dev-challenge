@@ -15,6 +15,7 @@ def dict_factory(cursor, row):
 
 # For POST or PUT requests
 # It can add a new product or update an already existing one
+# It's just to make POST and PUT requests shorter
 def post_put(conn, qry, url_id=None):
 	# Get parameters
 	data = request.form.to_dict()
@@ -27,6 +28,8 @@ def post_put(conn, qry, url_id=None):
 		cur.execute(qry, (title, price, inventory_count))
 	else:
 		cur.execute(qry, (title, price, inventory_count, url_id))
+
+	return jsonify({'title': title, 'price': price, 'inventory_count': inventory_count})
 
 # GET to query products
 # POST to add a new product
@@ -52,7 +55,7 @@ def add(url_id=None):
 				cur.execute('SELECT product_id, title, price, inventory_count FROM products WHERE product_id=?', (url_id,))
 				items = cur.fetchone()
 
-			return jsonify(items)
+			out = jsonify(items)
 
 		elif request.method == 'DELETE':
 			cur = conn.cursor()
@@ -61,15 +64,26 @@ def add(url_id=None):
 			else:
 				cur.execute('DELETE FROM products WHERE product_id=?', (url_id,))
 
-			return('deleted')
+			out = jsonify('deleted')
 
 		elif request.method == 'POST':
-			post_put(conn, 'INSERT INTO products (title, price, inventory_count) VALUES (?, ?, ?)')
-			return 'added'
+			out = post_put(conn, 'INSERT INTO products (title, price, inventory_count) VALUES (?, ?, ?)')
 
 		elif request.method == 'PUT':
-			post_put(conn, 'UPDATE products SET title=?, price=?, inventory_count=? WHERE product_id=?', url_id=url_id)
-			return 'updated'
+			out = post_put(conn, 'UPDATE products SET title=?, price=?, inventory_count=? WHERE product_id=?', url_id=url_id)
+	return out
+
+
+# Buying products
+@app.route('/api/products/<int:url_id>/purchase', methods=['GET', 'POST'])
+def purchase(url_id):
+	with sqlite3.connect(db_name) as conn:
+		cur = conn.cursor()
+		cur.execute('''UPDATE products
+							SET inventory_count = inventory_count - 1
+							WHERE inventory_count > 0 AND product_id=?''', (url_id,))
+		out = jsonify(cur.rowcount)
+	return(out)
 
 @app.route('/')
 def main():
