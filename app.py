@@ -64,7 +64,7 @@ def add(url_id=None):
 			return 'added'
 
 		elif request.method == 'PUT':
-			post_put('UPDATE products SET title=?, price=?, inventory_count=? WHERE product_id=?')
+			post_put(conn, 'UPDATE products SET title=?, price=?, inventory_count=? WHERE product_id=?', url_id=url_id)
 			return 'updated'
 
 @app.route('/')
