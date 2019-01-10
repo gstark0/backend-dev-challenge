@@ -37,7 +37,7 @@ def post_put(conn, qry, url_id=None):
 # DELETE to delete products
 @app.route('/api/products', methods=['GET', 'POST', 'DELETE'])
 @app.route('/api/products/<int:url_id>', methods=['GET', 'PUT', 'DELETE'])
-def add(url_id=None):
+def products(url_id=None):
 	with sqlite3.connect(db_name) as conn:
 		if request.method == 'GET':
 			# Column names
