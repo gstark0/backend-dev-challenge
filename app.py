@@ -82,12 +82,16 @@ def purchase(url_id):
 		cur.execute('''UPDATE products
 							SET inventory_count = inventory_count - 1
 							WHERE inventory_count > 0 AND product_id=?''', (url_id,))
+
+		# If product's inventory_count was updated, return 'Ok'
+		# or else return custom 404 message
 		if cur.rowcount is 1:
-			out = '1'
+			out = 'Ok'
 		else:
 			out = 'Product out of stock', 404
 	return out
 
+# Handle 404 errors
 @app.errorhandler(404)
 def page_not_found(e):
 	return 'Not found', 404
