@@ -3,6 +3,7 @@ import sqlite3
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
+app.url_map.strict_slashes = False
 
 db_name = 'database.db'
 
