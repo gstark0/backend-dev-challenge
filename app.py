@@ -74,7 +74,6 @@ def products(url_id=None):
 			out = post_put(conn, 'UPDATE products SET title=?, price=?, inventory_count=? WHERE product_id=?', url_id=url_id)
 	return out
 
-
 # Buying products
 @app.route('/api/products/<int:url_id>/purchase', methods=['GET', 'POST'])
 def purchase(url_id):
@@ -83,8 +82,15 @@ def purchase(url_id):
 		cur.execute('''UPDATE products
 							SET inventory_count = inventory_count - 1
 							WHERE inventory_count > 0 AND product_id=?''', (url_id,))
-		out = jsonify(cur.rowcount)
-	return(out)
+		if cur.rowcount is 1:
+			out = '1'
+		else:
+			out = 'Product out of stock', 404
+	return out
+
+@app.errorhandler(404)
+def page_not_found(e):
+	return 'Not found', 404
 
 @app.route('/')
 def main():
