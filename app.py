@@ -30,7 +30,7 @@ def post_put(conn, qry, url_id=None):
 	else:
 		cur.execute(qry, (title, price, inventory_count, url_id))
 
-	return jsonify({'title': title, 'price': price, 'inventory_count': inventory_count})
+	return {'title': title, 'price': price, 'inventory_count': inventory_count}
 
 # GET to query products
 # POST to add a new product
@@ -56,7 +56,7 @@ def products(url_id=None):
 				cur.execute('SELECT product_id, title, price, inventory_count FROM products WHERE product_id=?', (url_id,))
 				items = cur.fetchone()
 
-			out = jsonify(items)
+			out = items
 
 		elif request.method == 'DELETE':
 			cur = conn.cursor()
@@ -65,14 +65,14 @@ def products(url_id=None):
 			else:
 				cur.execute('DELETE FROM products WHERE product_id=?', (url_id,))
 
-			out = jsonify('deleted')
+			out = 'deleted'
 
 		elif request.method == 'POST':
 			out = post_put(conn, 'INSERT INTO products (title, price, inventory_count) VALUES (?, ?, ?)')
 
 		elif request.method == 'PUT':
 			out = post_put(conn, 'UPDATE products SET title=?, price=?, inventory_count=? WHERE product_id=?', url_id=url_id)
-	return out
+	return jsonify(out)
 
 # Buying products
 @app.route('/api/products/<int:url_id>/purchase', methods=['GET', 'POST'])
@@ -80,21 +80,21 @@ def purchase(url_id):
 	with sqlite3.connect(db_name) as conn:
 		cur = conn.cursor()
 		cur.execute('''UPDATE products
-							SET inventory_count = inventory_count - 1
-							WHERE inventory_count > 0 AND product_id=?''', (url_id,))
+						SET inventory_count = inventory_count - 1
+						WHERE inventory_count > 0 AND product_id=?''', (url_id,))
 
 		# If product's inventory_count was updated, return 'Ok'
 		# or else return custom 404 message
 		if cur.rowcount is 1:
-			out = 'Ok'
+			out = jsonify('Ok')
 		else:
-			out = 'Product out of stock', 404
+			out = jsonify('Product out of stock'), 404
 	return out
 
 # Handle 404 errors
 @app.errorhandler(404)
 def page_not_found(e):
-	return 'Not found', 404
+	return jsonify('Cannot %s %s' % (request.method, request.path)), 404
 
 @app.route('/')
 def main():
