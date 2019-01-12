@@ -1,18 +1,16 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Blueprint
+from cart import cart_api
 import sqlite3
+from utils import dict_factory
 
 app = Flask(__name__)
+app.register_blueprint(cart_api)
 app.config['JSON_SORT_KEYS'] = False
 app.url_map.strict_slashes = False
 
 db_name = 'database.db'
 
-# Getting column names
-def dict_factory(cursor, row):
-	d = {}
-	for idx,col in enumerate(cursor.description):
-		d[col[0]] = row[idx]
-	return d
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 # For POST or PUT requests
 # It can add a new product or update an already existing one
