@@ -7,6 +7,7 @@ app = Flask(__name__)
 app.register_blueprint(cart_api)
 app.config['JSON_SORT_KEYS'] = False
 app.url_map.strict_slashes = False
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 db_name = 'database.db'
 
