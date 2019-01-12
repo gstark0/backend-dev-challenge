@@ -12,24 +12,6 @@ db_name = 'database.db'
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-# For POST or PUT requests
-# It can add a new product or update an already existing one
-# It's just to make POST and PUT requests shorter
-def post_put(conn, qry, url_id=None):
-	# Get parameters
-	data = request.form.to_dict()
-	title = data['title']
-	price = data['price']
-	inventory_count = data['inventory_count']
-
-	cur = conn.cursor()
-	if url_id is None:
-		cur.execute(qry, (title, price, inventory_count))
-	else:
-		cur.execute(qry, (title, price, inventory_count, url_id))
-
-	return {'title': title, 'price': price, 'inventory_count': inventory_count}
-
 # GET to query products
 # POST to add a new product
 # PUT to update a product
@@ -38,11 +20,13 @@ def post_put(conn, qry, url_id=None):
 @app.route('/api/products/<int:url_id>', methods=['GET', 'PUT', 'DELETE'])
 def products(url_id=None):
 	with sqlite3.connect(db_name) as conn:
-		if request.method == 'GET':
-			# Column names
-			conn.row_factory = dict_factory
+		# Column names
+		conn.row_factory = dict_factory
+		cur = conn.cursor()
 
-			cur = conn.cursor()
+		if request.method == 'GET':
+
+			# Query all products if url_id is not specified
 			if url_id is None:
 				available = str(request.args.get('available')).lower()
 				if available == 'true' or available == '1':
@@ -54,23 +38,69 @@ def products(url_id=None):
 				cur.execute('SELECT product_id, title, price, inventory_count FROM products WHERE product_id=?', (url_id,))
 				items = cur.fetchone()
 
-			out = items
+			out = jsonify(items)
 
+		# Delete a product
 		elif request.method == 'DELETE':
-			cur = conn.cursor()
 			if url_id is None:
 				cur.execute('DELETE FROM products')
 			else:
 				cur.execute('DELETE FROM products WHERE product_id=?', (url_id,))
 
-			out = 'deleted'
+			out = jsonify('deleted')
 
+		# Add a new product to database
 		elif request.method == 'POST':
-			out = post_put(conn, 'INSERT INTO products (title, price, inventory_count) VALUES (?, ?, ?)')
 
+			# Get data from request
+			data = request.form.to_dict()
+			try:
+				title = str(data['title'])
+				price = float(data['price'])
+				inventory_count = int(data['inventory_count'])
+
+			# Handle KeyError for security reasons - to make sure that you have a correct type
+			except ValueError:
+				return 'Bad input type'
+
+			# All params are required
+			except KeyError:
+				return 'title, price and inventory_count are required'
+
+			# Add a new product to the database
+			cur.execute('INSERT INTO products (title, price, inventory_count) VALUES (?, ?, ?)', (title, price, inventory_count))
+			out = jsonify({'created_resource': '/api/products/%s' % cur.lastrowid}), 201
+
+		# Update a product
 		elif request.method == 'PUT':
-			out = post_put(conn, 'UPDATE products SET title=?, price=?, inventory_count=? WHERE product_id=?', url_id=url_id)
-	return jsonify(out)
+
+			# Get data from request and update specified fields
+			data = request.form.to_dict()
+			try:
+				try:
+					title = str(data['title'])
+					cur.execute('UPDATE products SET title = ? WHERE product_id = ?', (title, url_id))
+				except KeyError:
+					pass
+
+				try:
+					price = float(data['price'])
+					cur.execute('UPDATE products SET price = ? WHERE product_id = ?', (price, url_id))
+				except KeyError:
+					pass
+
+				try:
+					inventory_count = int(data['inventory_count'])
+					cur.execute('UPDATE products SET inventory_count = ? WHERE product_id = ?', (inventory_count, url_id))
+				except KeyError:
+					pass
+
+			except ValueError:
+				return 'Bad input type'
+
+			out = jsonify({'updated_resource': '/api/products/%s' % url_id})
+
+	return out
 
 # Buying products
 @app.route('/api/products/<int:url_id>/purchase', methods=['GET', 'POST'])
