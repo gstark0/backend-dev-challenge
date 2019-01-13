@@ -1,6 +1,6 @@
 # Shopify developer challenge
 #### Online marketplace API
-This is a simple API for an online marketplace, built using Python Flask web microframework. You can test the hosted version available at https://opendata.website
+This is a simple API for an online marketplace, built using Python Flask web microframework. You can test the hosted version available at https://opendata.website but the server is slow, so I recommend running it locally.
 
 ### Get started
 In order to run the API locally, you need the Python 3.x.x with the following dependencies installed:
@@ -22,21 +22,106 @@ You can install them via `pip install`.
 
 
 ### Examples of each request
-`GET /api/products`
-`POST /api/products`
-`DELETE /api/products`
-
-`GET /api/products/1`
-`PUT /api/products/1`
-`DELETE /api/products/1`
-
-`POST /api/products/1/purchase`
-
-`GET /api/cart/1`
-`POST /api/cart/1`
-`DELETE /api/cart/1`
-
-`GET /api/cart/1/complete`
+`curl --request POST --data 'title=PearBook 15 inches&price=1699.99&inventory_count=20' http://opendata.website/api/products`
+Output:
+```
+{
+  "created_resource": "/api/products/1"
+}
+```
+--------------------------------------------------------------------
+`curl --request GET http://opendata.website/api/products/1`
+Output:
+```
+{
+  "product_id": 1, 
+  "title": "PearBook 15 inches", 
+  "price": 1699.99, 
+  "inventory_count": 20
+}
+```
+--------------------------------------------------------------------
+`curl --request GET http://opendata.website/api/products`
+Output:
+```
+[
+  {
+    "product_id": 1, 
+    "title": "PearBook 15 inches", 
+    "price": 1699.99, 
+    "inventory_count": 20
+  }, 
+  {
+    "product_id": 2, 
+    "title": "PearPhone 32gb", 
+    "price": 799.99, 
+    "inventory_count": 27
+  }, 
+  {
+    "product_id": 3, 
+    "title": "PearPhone 64gb", 
+    "price": 899.99, 
+    "inventory_count": 0
+  }
+]
+```
+--------------------------------------------------------------------
+`curl --request GET http://opendata.website/api/products?available=true`
+Output:
+```
+[
+  {
+    "product_id": 1, 
+    "title": "PearBook 15 inches", 
+    "price": 1699.99, 
+    "inventory_count": 20
+  }, 
+  {
+    "product_id": 2, 
+    "title": "PearPhone 32gb", 
+    "price": 799.99, 
+    "inventory_count": 27
+  }
+]
+```
+--------------------------------------------------------------------
+`curl --request PUT --data 'price=449.87' http://opendata.website/api/products/1`
+Output:
+`updated`
+--------------------------------------------------------------------
+`curl --request DELETE http://opendata.website/api/products/1`
+Output:
+`"deleted"`
+--------------------------------------------------------------------
+`curl --request DELETE http://opendata.website/api/products`
+Output:
+`"deleted"`
+--------------------------------------------------------------------
+`curl --request POST http://opendata.website/api/products/1/purchase`
+Output:
+`"Ok"`
+--------------------------------------------------------------------
+`curl --request POST --data 'product_id=1&quantity=2' http://opendata.website/api/cart/1`
+Output:
+```
+{
+  "total": 899.74, 
+  "products": [
+    {
+      "product_id": 1, 
+      "title": "PearBook 15 inches", 
+      "price": 449.87, 
+      "total": 899.74, 
+      "quantity": 2
+    }
+  ]
+}
+```
+--------------------------------------------------------------------
+`curl --request POST http://opendata.website/api/cart/1/complete`
+Output:
+`"cart 1 completed"`
+--------------------------------------------------------------------
 
 
 ### Security
