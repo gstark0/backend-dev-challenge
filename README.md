@@ -87,19 +87,27 @@ Output:
 --------------------------------------------------------------------
 `curl --request PUT --data 'price=449.87' http://opendata.website/api/products/1`
 Output:
-`updated`
+```
+updated
+```
 --------------------------------------------------------------------
 `curl --request DELETE http://opendata.website/api/products/1`
 Output:
-`"deleted"`
+```
+deleted
+```
 --------------------------------------------------------------------
 `curl --request DELETE http://opendata.website/api/products`
 Output:
-`"deleted"`
+```
+"deleted"
+```
 --------------------------------------------------------------------
 `curl --request POST http://opendata.website/api/products/1/purchase`
 Output:
-`"Ok"`
+```
+"Ok"
+```
 --------------------------------------------------------------------
 `curl --request POST --data 'product_id=1&quantity=2' http://opendata.website/api/cart/1`
 Output:
@@ -120,7 +128,9 @@ Output:
 --------------------------------------------------------------------
 `curl --request POST http://opendata.website/api/cart/1/complete`
 Output:
-`"cart 1 completed"`
+```
+"cart 1 completed"
+```
 --------------------------------------------------------------------
 
 
