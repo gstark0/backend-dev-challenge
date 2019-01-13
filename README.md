@@ -1,8 +1,8 @@
 # Shopify developer challenge
-#### Online marketplace API
+### Online marketplace API
 This is a simple API for an online marketplace, built using Python Flask web microframework. You can test the hosted version available at https://opendata.website but the server is slow, so I recommend running it locally.
 
-### Get started
+## Get started
 In order to run the API locally, you need the Python 3.x.x with the following dependencies installed:
 * flask
 * sqlite3
@@ -10,7 +10,7 @@ In order to run the API locally, you need the Python 3.x.x with the following de
 
 You can install them via `pip install`.
 
-### Routes
+## Routes
 
 |Endpoint                    |GET|POST|PUT|DELETE|
 |----------------------------|-----------|-----------|----------|------|
@@ -21,7 +21,7 @@ You can install them via `pip install`.
 | /api/cart/1/complete       |-|"Complete" the cart with Id of 1. This means that the inventory of each added product will be reduced.|-|-
 
 
-### Examples of each request
+## Examples of each request
 `curl --request POST --data 'title=PearBook 15 inches&price=1699.99&inventory_count=20' http://opendata.website/api/products`
 Output:
 ```
