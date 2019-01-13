@@ -13,6 +13,14 @@ db_name = 'database.db'
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
+# Redirect to HTTPS
+@app.before_request
+def before_request():
+	if not request.is_secure and app.env != "development":
+		url = request.url.replace("http://", "https://", 1)
+		code = 301
+		return redirect(url, code=code)
+
 # GET to query products
 # POST to add a new product
 # PUT to update a product
