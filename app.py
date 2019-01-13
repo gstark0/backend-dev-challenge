@@ -1,7 +1,7 @@
-from flask import Flask, jsonify, request, Blueprint
+from flask import Flask, jsonify, request, Blueprint, redirect
+from utils import dict_factory
 from cart import cart_api
 import sqlite3
-from utils import dict_factory
 
 app = Flask(__name__)
 app.register_blueprint(cart_api)
