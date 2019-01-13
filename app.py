@@ -104,7 +104,7 @@ def products(url_id=None):
 	return out
 
 # Buying products
-@app.route('/api/products/<int:url_id>/purchase', methods=['GET', 'POST'])
+@app.route('/api/products/<int:url_id>/purchase', methods=['POST'])
 def purchase(url_id):
 	with sqlite3.connect(db_name) as conn:
 		cur = conn.cursor()
