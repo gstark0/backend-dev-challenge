@@ -1,5 +1,5 @@
 # Shopify developer challenge
-### Online marketplace API
+## Online marketplace API
 This is a simple API for an online marketplace, built using Python Flask web microframework. You can test the hosted version available at https://opendata.website but the server is slow, so I recommend running it locally.
 
 ## Get started
