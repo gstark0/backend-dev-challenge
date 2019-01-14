@@ -16,8 +16,8 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 # Redirect to HTTPS
 @app.before_request
 def before_request():
-	if not request.is_secure and app.env != "development":
-		url = request.url.replace("http://", "https://", 1)
+	if not request.is_secure and app.env != 'development':
+		url = request.url.replace('http://', 'https://', 1)
 		code = 301
 		return redirect(url, code=code)
 
@@ -56,7 +56,7 @@ def products(url_id=None):
 			else:
 				cur.execute('DELETE FROM products WHERE product_id=?', (url_id,))
 
-			out = jsonify('deleted')
+			out = jsonify('Deleted')
 
 		# Add a new product to database
 		elif request.method == 'POST':
@@ -123,7 +123,7 @@ def purchase(url_id):
 		# If product's inventory_count was updated, return 'Ok'
 		# or else return custom 404 message
 		if cur.rowcount is 1:
-			out = jsonify('Ok')
+			out = jsonify('Purchased')
 		else:
 			out = jsonify('Product out of stock'), 404
 	return out

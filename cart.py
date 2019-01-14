@@ -18,7 +18,7 @@ def complete(cart_id):
 						SET inventory_count = inventory_count - (SELECT quantity FROM cart_items WHERE cart_id = ? AND product_id = products.product_id)
 						WHERE product_id = (SELECT product_id FROM cart_items WHERE cart_id = ? AND product_id = products.product_id)''', (cart_id, cart_id))
 
-	return jsonify('cart %s completed' % cart_id)
+	return jsonify('Cart %s completed' % cart_id)
 
 # Add product to the cart
 @cart_api.route('/api/cart/<int:cart_id>', methods=['GET', 'POST'])
