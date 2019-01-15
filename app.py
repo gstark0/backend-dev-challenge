@@ -2,16 +2,24 @@ from flask import Flask, jsonify, request, Blueprint, redirect
 from utils import dict_factory
 from cart import cart_api
 import sqlite3
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 app.register_blueprint(cart_api)
 app.config['JSON_SORT_KEYS'] = False
 app.url_map.strict_slashes = False
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 db_name = 'database.db'
 
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+# Limit request rate to 2 per second
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=['2 per second'],
+)
 
 # Redirect to HTTPS
 @app.before_request
@@ -132,10 +140,25 @@ def purchase(url_id):
 			out = jsonify('Product out of stock'), 404
 	return out
 
+# Handle 400 errors - Bad request
+@app.errorhandler(400)
+def page_not_found(e):
+	return jsonify('Bad request'), 400
+
 # Handle 404 errors
 @app.errorhandler(404)
 def page_not_found(e):
 	return jsonify('Cannot %s %s' % (request.method, request.path)), 404
+
+# Handle 429 errors - Too many requests
+@app.errorhandler(429)
+def page_not_found(e):
+	return jsonify('Too many requests'), 429
+
+# Handle 500 errors - Too many requests
+@app.errorhandler(500)
+def page_not_found(e):
+	return jsonify('Internal server error'), 500
 
 @app.route('/')
 def main():
