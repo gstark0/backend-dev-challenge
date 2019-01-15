@@ -38,7 +38,7 @@ def cart(cart_id):
 
 		# Query cart by id and calculate total prices
 		if request.method == 'GET':
-			cur.execute('SELECT products.product_id, products.title, products.price, round(products.price * cart_items.quantity, 2) AS total, cart_items.quantity FROM products JOIN cart_items USING (product_id)')
+			cur.execute('SELECT products.product_id, products.title, products.price, round(products.price * cart_items.quantity, 2) AS total, cart_items.quantity FROM products JOIN cart_items USING (product_id) WHERE cart_items.cart_id = ?', (cart_id,))
 			out = cur.fetchall()
 			total = round(sum(d['total'] for d in out), 2)
 			out = jsonify({'total': total, 'products': out})
@@ -68,10 +68,13 @@ def cart(cart_id):
 
 			# Query inventory_count for later use (we will check if the specified quantity doesn't exceed it)
 			cur.execute('SELECT inventory_count FROM products WHERE product_id = ?', (product_id,))
-			inventory_count = cur.fetchone()['inventory_count']
+			inventory_count = cur.fetchone()
+			if inventory_count is None:
+				return jsonify('Product with this ID does not exist')
+			inventory_count = inventory_count['inventory_count']
 
 			# Check if this product has already been added to this cart
-			cur.execute('SELECT quantity FROM cart_items WHERE product_id = ?', (product_id,))
+			cur.execute('SELECT quantity FROM cart_items WHERE product_id = ? AND cart_id = ?', (product_id, cart_id))
 			cart_quantity = cur.fetchone()
 			if cart_quantity:
 				# Check if quantity doesn't exceed inventory_count
@@ -79,7 +82,7 @@ def cart(cart_id):
 					return jsonify('inventory_count exceeded')
 
 				# Update quantity in the database by the specified value
-				cur.execute('UPDATE cart_items SET quantity = quantity + ? WHERE product_id = ?', (quantity, product_id))
+				cur.execute('UPDATE cart_items SET quantity = quantity + ? WHERE product_id = ? AND cart_id = ?', (quantity, product_id, cart_id))
 			else:
 				# Check if quantity doesn't exceed inventory_count
 				if quantity > inventory_count:
