@@ -21,12 +21,10 @@ def before_request():
 		code = 301
 		return redirect(url, code=code)
 
-"""
-GET to query products
-POST to add a new product
-PUT to update a product
-DELETE to delete products
-"""
+# GET to query products
+# POST to add a new product
+# PUT to update a product
+# DELETE to delete products
 @app.route('/api/products', methods=['GET', 'POST', 'DELETE'])
 @app.route('/api/products/<int:url_id>', methods=['GET', 'PUT', 'DELETE'])
 def products(url_id=None):
@@ -37,10 +35,8 @@ def products(url_id=None):
 
 		data = request.get_json()
 
-		"""
-		1. If ID is not specified, query all products, else return the specific product
-		2. If 'available' parameter is set to 'true' or '1', return products with inventory_count > 0
-		"""
+		# 1. If ID is not specified, query all products, else return the specific product
+		# 2. If 'available' parameter is set to 'true' or '1', return products with inventory_count > 0
 		if request.method == 'GET':
 
 			if url_id is None:
@@ -56,10 +52,8 @@ def products(url_id=None):
 
 			out = jsonify(items)
 
-		"""
-		Delete a product
-		1. If ID is not specified, delete all prodcuts, else delete the specific product
-		"""
+		# Delete a product
+		# 1. If ID is not specified, delete all prodcuts, else delete the specific product
 		elif request.method == 'DELETE':
 			if url_id is None:
 				cur.execute('DELETE FROM products')
@@ -68,12 +62,10 @@ def products(url_id=None):
 
 			out = jsonify('Deleted')
 
-		"""
-		Add a new product to database
-		1. Handle KeyError and ValueError for security reasons - to make sure that you have a correct type
-		2. Check if all parameters are provided
-		3. Add a new row to database
-		"""
+		# Add a new product to database
+		# 1. Handle KeyError and ValueError for security reasons - to make sure that you have a correct type
+		# 2. Check if all parameters are provided
+		# 3. Add a new row to database
 		elif request.method == 'POST':
 
 			if data is None:
@@ -93,11 +85,9 @@ def products(url_id=None):
 			cur.execute('INSERT INTO products (title, price, inventory_count) VALUES (?, ?, ?)', (title, price, inventory_count))
 			out = jsonify({'created_resource': '/api/products/%s' % cur.lastrowid}), 201
 
-		"""
-		Update a product
-		1. Handle ValueError to check if provided parameters are in correct type (e.g don't allow product_id as a string)
-		2. Update rows in database with provided data
-		"""
+		# Update a product
+		# 1. Handle ValueError to check if provided parameters are in correct type (e.g don't allow product_id as a string)
+		# 2. Update rows in database with provided data
 		elif request.method == 'PUT':
 			try:
 				try:
@@ -125,11 +115,9 @@ def products(url_id=None):
 
 	return out
 
-"""
-Buying products
-1. Decrement inventory_count
-2. Check if product's inventory_count was updated, return 'Purchased', else return custom 404 message
-"""
+# Buying products
+# 1. Decrement inventory_count
+# 2. Check if product's inventory_count was updated, return 'Purchased', else return custom 404 message
 @app.route('/api/products/<int:url_id>/purchase', methods=['POST'])
 def purchase(url_id):
 	with sqlite3.connect(db_name) as conn:
