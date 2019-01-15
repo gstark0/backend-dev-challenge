@@ -23,7 +23,7 @@ You can install them via `pip install`.
 
 
 ## Examples of each request
-`curl -d '{"title": "PearBook 15 inches", "price": 1699.99, "inventory_count": 20}' -H "Content-Type: application/json" -X POST https://opendata.website/api/products`
+`curl -d '{"title": "PearBook 15 inches", "price": 1699.99, "inventory_count": 20}' -H "Content-Type: application/json" -X POST https://opendata.website/api/products`\
 Output:
 ```
 {
@@ -31,7 +31,7 @@ Output:
 }
 ```
 --------------------------------------------------------------------
-`curl --request GET http://opendata.website/api/products/1`
+`curl --request GET http://opendata.website/api/products/1`\
 Output:
 ```
 {
@@ -42,7 +42,7 @@ Output:
 }
 ```
 --------------------------------------------------------------------
-`curl --request GET http://opendata.website/api/products`
+`curl --request GET http://opendata.website/api/products`\
 Output:
 ```
 [
@@ -67,7 +67,7 @@ Output:
 ]
 ```
 --------------------------------------------------------------------
-`curl --request GET http://opendata.website/api/products?available=true`
+`curl --request GET http://opendata.website/api/products?available=true`\
 Output:
 ```
 [
@@ -86,31 +86,31 @@ Output:
 ]
 ```
 --------------------------------------------------------------------
-`curl -d '{"price": 449.87}' -H "Content-Type: application/json" -X PUT https://opendata.website/api/products/1`
+`curl -d '{"price": 449.87}' -H "Content-Type: application/json" -X PUT https://opendata.website/api/products/1`\
 Output:
 ```
 Updated
 ```
 --------------------------------------------------------------------
-`curl --request DELETE http://opendata.website/api/products/1`
+`curl --request DELETE http://opendata.website/api/products/1`\
 Output:
 ```
 Deleted
 ```
 --------------------------------------------------------------------
-`curl --request DELETE http://opendata.website/api/products`
+`curl --request DELETE http://opendata.website/api/products`\
 Output:
 ```
 "Deleted"
 ```
 --------------------------------------------------------------------
-`curl --request POST http://opendata.website/api/products/1/purchase`
+`curl --request POST http://opendata.website/api/products/1/purchase`\
 Output:
 ```
 "Purchased"
 ```
 --------------------------------------------------------------------
-`curl -d '{"product_id": 1, "quantity": 2}' -H "Content-Type: application/json" -X POST https://opendata.website/api/cart/1`
+`curl -d '{"product_id": 1, "quantity": 2}' -H "Content-Type: application/json" -X POST https://opendata.website/api/cart/1`\
 Output:
 ```
 {
@@ -127,13 +127,13 @@ Output:
 }
 ```
 --------------------------------------------------------------------
-`curl --request POST http://opendata.website/api/cart/1/complete`
+`curl --request POST http://opendata.website/api/cart/1/complete`\
 Output:
 ```
 "Cart 1 completed"
 ```
 --------------------------------------------------------------------
-`curl -d '{"product_id": 1}' -H "Content-Type: application/json" -X DELETE https://opendata.website/api/cart/1`
+`curl -d '{"product_id": 1}' -H "Content-Type: application/json" -X DELETE https://opendata.website/api/cart/1`\
 Output:
 ```
 "Deleted"
