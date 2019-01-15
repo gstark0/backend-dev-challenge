@@ -142,22 +142,22 @@ def purchase(url_id):
 
 # Handle 400 errors - Bad request
 @app.errorhandler(400)
-def page_not_found(e):
+def bad_request(e):
 	return jsonify('Bad request'), 400
 
-# Handle 404 errors
+# Handle 404 errors - Page not found
 @app.errorhandler(404)
 def page_not_found(e):
 	return jsonify('Cannot %s %s' % (request.method, request.path)), 404
 
 # Handle 429 errors - Too many requests
 @app.errorhandler(429)
-def page_not_found(e):
+def too_many_requests(e):
 	return jsonify('Too many requests'), 429
 
-# Handle 500 errors - Too many requests
+# Handle 500 errors - Internal server error
 @app.errorhandler(500)
-def page_not_found(e):
+def internal_server_error(e):
 	return jsonify('Internal server error'), 500
 
 @app.route('/')
