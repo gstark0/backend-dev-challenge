@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, abort
 from utils import dict_factory
 from datetime import datetime
 import sqlite3
@@ -24,18 +24,36 @@ def complete(cart_id):
 	return jsonify('Cart %s completed' % cart_id)
 
 # Add product to the cart
-@cart_api.route('/api/cart/<int:cart_id>', methods=['GET', 'POST'])
+@cart_api.route('/api/cart/<int:cart_id>', methods=['GET', 'POST', 'GET', 'DELETE'])
 def cart(cart_id):
-
 	with sqlite3.connect(db_name) as conn:
 		conn.row_factory = dict_factory
 		cur = conn.cursor()
 
-		if request.method == 'POST':
+		data = request.get_json()
+		if request.method == 'GET':
+			# Query cart by id and calculate total prices
+			cur.execute('SELECT products.product_id, products.title, products.price, round(products.price * cart_items.quantity, 2) AS total, cart_items.quantity FROM products JOIN cart_items USING (product_id)')
+			out = cur.fetchall()
+			total = round(sum(d['total'] for d in out), 2)
+			out = jsonify({'total': total, 'products': out})
+
+		elif request.method == 'POST':
 			# Get parameters
-			data = request.form.to_dict()
-			product_id = data['product_id']
-			quantity = int(data['quantity'])
+			if data is None:
+				return jsonify('product_id and quantity are required')
+
+			try:
+				product_id = int(data['product_id'])
+				quantity = int(data['quantity'])
+
+			# Handle KeyError for security reasons - to make sure that you have a correct type
+			except ValueError:
+				return jsonify('Bad input type')
+
+			# All params are required
+			except KeyError:
+				return jsonify('product_id and quantity are required')
 
 			# Create a cart with specified ID if it doesn't already exist
 			cur.execute('SELECT * FROM carts WHERE cart_id = ?', (cart_id,))
@@ -48,7 +66,7 @@ def cart(cart_id):
 			inventory_count = cur.fetchone()['inventory_count']
 
 			# Check if this product has already been added to this cart
-			cur.execute('SELECT quantity FROM cart_items WHERE product_id = ?', (product_id))
+			cur.execute('SELECT quantity FROM cart_items WHERE product_id = ?', (product_id,))
 			cart_quantity = cur.fetchone()
 			if cart_quantity:
 				# Check if quantity doesn't exceed inventory_count
@@ -65,9 +83,24 @@ def cart(cart_id):
 				# Add an item to the cart
 				cur.execute('INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?, ?, ?)', (cart_id, product_id, quantity))
 
-		# Query cart by id and calculate total prices
-		cur.execute('SELECT products.product_id, products.title, products.price, round(products.price * cart_items.quantity, 2) AS total, cart_items.quantity FROM products JOIN cart_items USING (product_id)')
-		out = cur.fetchall()
-		total = round(sum(d['total'] for d in out), 2)
+			out = jsonify('Product added')
 
-	return jsonify({'total': total, 'products': out})
+		# Remove product from the cart
+		elif request.method == 'DELETE':
+			if data is None:
+				return abort(400)
+
+			try:
+				product_id = data['product_id']
+			except KeyError:
+				return jsonify('product_id is required')
+			cur.execute('DELETE FROM cart_items WHERE cart_id = ? AND product_id = ?', (cart_id, product_id))
+
+			# Check if product was removed
+			if cur.rowcount is 1:
+				out = jsonify('Deleted')
+			else:
+				out = jsonify('No such a product in this cart')
+
+
+	return out
