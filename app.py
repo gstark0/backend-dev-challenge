@@ -119,7 +119,7 @@ def products(url_id=None):
 			except ValueError:
 				return jsonify('Bad input type')
 
-			out = jsonify({'updated_resource': '/api/products/%s' % url_id})
+			out = jsonify('Updated')
 
 	return out
 
