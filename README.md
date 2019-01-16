@@ -30,6 +30,7 @@ curl -X POST \
 
 
 ## Examples of each request
+### Add a new product
 ```
 curl -X POST \
    -H "Content-Type: application/json" \
@@ -43,6 +44,7 @@ Output:
 }
 ```
 --------------------------------------------------------------------
+### Get a product
 `curl -X GET http://opendata.website/api/products/1`\
 Output:
 ```
@@ -54,6 +56,7 @@ Output:
 }
 ```
 --------------------------------------------------------------------
+### Get all products
 `curl -X GET http://opendata.website/api/products`\
 Output:
 ```
@@ -79,6 +82,7 @@ Output:
 ]
 ```
 --------------------------------------------------------------------
+### Get available products
 `curl -X GET http://opendata.website/api/products?available=true`\
 Output:
 ```
@@ -98,6 +102,7 @@ Output:
 ]
 ```
 --------------------------------------------------------------------
+### Update a product
 ```
 curl -X PUT \
    -H "Content-Type: application/json" \
@@ -109,24 +114,28 @@ Output:
 Updated
 ```
 --------------------------------------------------------------------
+### Delete a product
 `curl -X DELETE http://opendata.website/api/products/1`\
 Output:
 ```
 Deleted
 ```
 --------------------------------------------------------------------
+### Delete all products
 `curl -X DELETE http://opendata.website/api/products`\
 Output:
 ```
 "Deleted"
 ```
 --------------------------------------------------------------------
+### Purchase a product
 `curl -X POST http://opendata.website/api/products/1/purchase`\
 Output:
 ```
 "Purchased"
 ```
 --------------------------------------------------------------------
+### Add a product to cart
 ```
 curl -X POST \
    -H "Content-Type: application/json" \
@@ -149,12 +158,14 @@ Output:
 }
 ```
 --------------------------------------------------------------------
+### Complete the cart
 `curl -X POST http://opendata.website/api/cart/1/complete`\
 Output:
 ```
 "Cart 1 completed"
 ```
 --------------------------------------------------------------------
+### Delete a product from cart
 ```
 curl -X DELETE \
    -H "Content-Type: application/json" \
