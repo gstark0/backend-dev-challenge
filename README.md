@@ -111,14 +111,14 @@ curl -X PUT \
 ```
 Output:
 ```
-Updated
+"Updated"
 ```
 --------------------------------------------------------------------
 ### Delete a product
 `curl -X DELETE http://opendata.website/api/products/1`\
 Output:
 ```
-Deleted
+"Deleted"
 ```
 --------------------------------------------------------------------
 ### Delete all products
