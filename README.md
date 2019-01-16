@@ -30,10 +30,12 @@ curl -X POST \
 
 
 ## Examples of each request
-`curl -X POST \
+```
+curl -X POST \
    -H "Content-Type: application/json" \
    -d '{"title": "PearBook 15 inches", "price": 1699.99, "inventory_count": 20}'  \
-   https://opendata.website/api/products`\
+   https://opendata.website/api/products
+```
 Output:
 ```
 {
@@ -96,10 +98,12 @@ Output:
 ]
 ```
 --------------------------------------------------------------------
-`curl -X PUT \
+```
+curl -X PUT \
    -H "Content-Type: application/json" \
    -d '{"price": 449.87}' \
-   https://opendata.website/api/products/1`\
+   https://opendata.website/api/products/1
+```
 Output:
 ```
 Updated
@@ -123,10 +127,12 @@ Output:
 "Purchased"
 ```
 --------------------------------------------------------------------
-`curl -X POST \
+```
+curl -X POST \
    -H "Content-Type: application/json" \
    -d '{"product_id": 1, "quantity": 2}' \
-   https://opendata.website/api/cart/1`\
+   https://opendata.website/api/cart/1
+```
 Output:
 ```
 {
@@ -149,9 +155,11 @@ Output:
 "Cart 1 completed"
 ```
 --------------------------------------------------------------------
-`curl -X DELETE \
+```
+curl -X DELETE \
    -H "Content-Type: application/json" \
-   -d '{"product_id": 1}' https://opendata.website/api/cart/1`\
+   -d '{"product_id": 1}' https://opendata.website/api/cart/1
+```
 Output:
 ```
 "Deleted"
