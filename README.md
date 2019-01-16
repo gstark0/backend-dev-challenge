@@ -10,9 +10,16 @@ In order to run the API locally, you need the Python 3.x.x with the following de
 * datetime
 
 You can install them via `pip install`.
+## Data Formats
+The API accepts data in JSON only. When sending data, set the `Content-Type` header to `application/json` with JSON body. For example:
+```
+curl -X POST \
+   -H "Content-Type: application/json" \
+   -d '{"title": "PearBook 15 inches", "price": 1699.99, "inventory_count": 20}'  \
+   https://opendata.website/api/products
+```
 
 ## Routes
-
 |Endpoint                    |GET|POST|PUT|DELETE|
 |----------------------------|-----------|-----------|----------|------|
 | /api/products              | Query all products from the database. You can also query only available products by adding `?available=True` or `?available=1` parameter.| Add a new product to the database. The request should look like this: `{'title': 'Product's title, 'price': 399.99, 'quantity': 10}`|-|Delete all existing products from the database.
