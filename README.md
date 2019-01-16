@@ -178,7 +178,7 @@ Output:
 --------------------------------------------------------------------
 
 
-### Security
+## Security
 Security is a significant aspect of every API. Here are the steps that have been made towards making this Online Marketplace API more secure:
 1. Only requests over HTTPS are allowed.
 2. Returns 405 `Method not allowed` if one is using method that is not allowed.
