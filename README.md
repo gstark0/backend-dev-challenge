@@ -10,8 +10,8 @@ In order to run the API locally, you need the Python 3.x.x with the following de
 * datetime
 
 You can install them via `pip install`.
-## Data Formats
-The API accepts data in JSON only. When sending data, set the `Content-Type` header to `application/json` with JSON body. For example:
+## Data format
+This API accepts data in JSON only. When sending data, set the `Content-Type` header to `application/json` with JSON body. For example:
 ```
 curl -X POST \
    -H "Content-Type: application/json" \
@@ -30,7 +30,10 @@ curl -X POST \
 
 
 ## Examples of each request
-`curl -d '{"title": "PearBook 15 inches", "price": 1699.99, "inventory_count": 20}' -H "Content-Type: application/json" -X POST https://opendata.website/api/products`\
+`curl -X POST \
+   -H "Content-Type: application/json" \
+   -d '{"title": "PearBook 15 inches", "price": 1699.99, "inventory_count": 20}'  \
+   https://opendata.website/api/products`\
 Output:
 ```
 {
@@ -38,7 +41,7 @@ Output:
 }
 ```
 --------------------------------------------------------------------
-`curl --request GET http://opendata.website/api/products/1`\
+`curl -X GET http://opendata.website/api/products/1`\
 Output:
 ```
 {
@@ -49,7 +52,7 @@ Output:
 }
 ```
 --------------------------------------------------------------------
-`curl --request GET http://opendata.website/api/products`\
+`curl -X GET http://opendata.website/api/products`\
 Output:
 ```
 [
@@ -74,7 +77,7 @@ Output:
 ]
 ```
 --------------------------------------------------------------------
-`curl --request GET http://opendata.website/api/products?available=true`\
+`curl -X GET http://opendata.website/api/products?available=true`\
 Output:
 ```
 [
@@ -93,31 +96,37 @@ Output:
 ]
 ```
 --------------------------------------------------------------------
-`curl -d '{"price": 449.87}' -H "Content-Type: application/json" -X PUT https://opendata.website/api/products/1`\
+`curl -X PUT \
+   -H "Content-Type: application/json" \
+   -d '{"price": 449.87}' \
+   https://opendata.website/api/products/1`\
 Output:
 ```
 Updated
 ```
 --------------------------------------------------------------------
-`curl --request DELETE http://opendata.website/api/products/1`\
+`curl -X DELETE http://opendata.website/api/products/1`\
 Output:
 ```
 Deleted
 ```
 --------------------------------------------------------------------
-`curl --request DELETE http://opendata.website/api/products`\
+`curl -X DELETE http://opendata.website/api/products`\
 Output:
 ```
 "Deleted"
 ```
 --------------------------------------------------------------------
-`curl --request POST http://opendata.website/api/products/1/purchase`\
+`curl -X POST http://opendata.website/api/products/1/purchase`\
 Output:
 ```
 "Purchased"
 ```
 --------------------------------------------------------------------
-`curl -d '{"product_id": 1, "quantity": 2}' -H "Content-Type: application/json" -X POST https://opendata.website/api/cart/1`\
+`curl -X POST \
+   -H "Content-Type: application/json" \
+   -d '{"product_id": 1, "quantity": 2}' \
+   https://opendata.website/api/cart/1`\
 Output:
 ```
 {
@@ -134,13 +143,15 @@ Output:
 }
 ```
 --------------------------------------------------------------------
-`curl --request POST http://opendata.website/api/cart/1/complete`\
+`curl -X POST http://opendata.website/api/cart/1/complete`\
 Output:
 ```
 "Cart 1 completed"
 ```
 --------------------------------------------------------------------
-`curl -d '{"product_id": 1}' -H "Content-Type: application/json" -X DELETE https://opendata.website/api/cart/1`\
+`curl -X DELETE \
+   -H "Content-Type: application/json" \
+   -d '{"product_id": 1}' https://opendata.website/api/cart/1`\
 Output:
 ```
 "Deleted"
