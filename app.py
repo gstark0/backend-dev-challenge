@@ -150,6 +150,11 @@ def bad_request(e):
 def page_not_found(e):
 	return jsonify('Cannot %s %s' % (request.method, request.path)), 404
 
+# Handle 405 errors - Method not allowed
+@app.errorhandler(405)
+def page_not_found(e):
+	return jsonify('%s method not allowed' % request.method, 405
+
 # Handle 429 errors - Too many requests
 @app.errorhandler(429)
 def too_many_requests(e):
