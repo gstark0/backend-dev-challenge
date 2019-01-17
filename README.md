@@ -1,6 +1,6 @@
 # Shopify developer challenge
 ## Online marketplace API
-This is a simple API for an online marketplace, built using Python Flask web microframework. You can test the hosted version available at https://opendata.website but the server is slow, so I recommend running it locally.
+This is a simple API for an online marketplace, built using Python Flask web microframework. You can test the hosted version available at https://opendata.website.
 
 ## Get started
 In order to run the API locally, you need the Python 3.x.x with the following dependencies installed:
@@ -10,9 +10,16 @@ In order to run the API locally, you need the Python 3.x.x with the following de
 * datetime
 
 You can install them via `pip install`.
+## Data format
+This API accepts data in JSON only. When sending data, set the `Content-Type` header to `application/json` with JSON body. For example:
+```
+curl -X POST \
+   -H "Content-Type: application/json" \
+   -d '{"title": "PearBook 15 inches", "price": 1699.99, "inventory_count": 20}'  \
+   https://opendata.website/api/products
+```
 
 ## Routes
-
 |Endpoint                    |GET|POST|PUT|DELETE|
 |----------------------------|-----------|-----------|----------|------|
 | /api/products              | Query all products from the database. You can also query only available products by adding `?available=True` or `?available=1` parameter.| Add a new product to the database. The request should look like this: `{'title': 'Product's title, 'price': 399.99, 'quantity': 10}`|-|Delete all existing products from the database.
@@ -23,7 +30,13 @@ You can install them via `pip install`.
 
 
 ## Examples of each request
-`curl -d '{"title": "PearBook 15 inches", "price": 1699.99, "inventory_count": 20}' -H "Content-Type: application/json" -X POST https://opendata.website/api/products`\
+### Add a new product
+```
+curl -X POST \
+   -H "Content-Type: application/json" \
+   -d '{"title": "PearBook 15 inches", "price": 1699.99, "inventory_count": 20}'  \
+   https://opendata.website/api/products
+```
 Output:
 ```
 {
@@ -31,7 +44,8 @@ Output:
 }
 ```
 --------------------------------------------------------------------
-`curl --request GET http://opendata.website/api/products/1`\
+### Get a product
+`curl -X GET https://opendata.website/api/products/1`\
 Output:
 ```
 {
@@ -42,7 +56,8 @@ Output:
 }
 ```
 --------------------------------------------------------------------
-`curl --request GET http://opendata.website/api/products`\
+### Get all products
+`curl -X GET https://opendata.website/api/products`\
 Output:
 ```
 [
@@ -67,7 +82,8 @@ Output:
 ]
 ```
 --------------------------------------------------------------------
-`curl --request GET http://opendata.website/api/products?available=true`\
+### Get available products
+`curl -X GET https://opendata.website/api/products?available=true`\
 Output:
 ```
 [
@@ -86,31 +102,46 @@ Output:
 ]
 ```
 --------------------------------------------------------------------
-`curl -d '{"price": 449.87}' -H "Content-Type: application/json" -X PUT https://opendata.website/api/products/1`\
+### Update a product
+```
+curl -X PUT \
+   -H "Content-Type: application/json" \
+   -d '{"price": 449.87}' \
+   httpss://opendata.website/api/products/1
+```
 Output:
 ```
-Updated
+"Updated"
 ```
 --------------------------------------------------------------------
-`curl --request DELETE http://opendata.website/api/products/1`\
-Output:
-```
-Deleted
-```
---------------------------------------------------------------------
-`curl --request DELETE http://opendata.website/api/products`\
+### Delete a product
+`curl -X DELETE https://opendata.website/api/products/1`\
 Output:
 ```
 "Deleted"
 ```
 --------------------------------------------------------------------
-`curl --request POST http://opendata.website/api/products/1/purchase`\
+### Delete all products
+`curl -X DELETE https://opendata.website/api/products`\
+Output:
+```
+"Deleted"
+```
+--------------------------------------------------------------------
+### Purchase a product
+`curl -X POST https://opendata.website/api/products/1/purchase`\
 Output:
 ```
 "Purchased"
 ```
 --------------------------------------------------------------------
-`curl -d '{"product_id": 1, "quantity": 2}' -H "Content-Type: application/json" -X POST https://opendata.website/api/cart/1`\
+### Add a product to cart
+```
+curl -X POST \
+   -H "Content-Type: application/json" \
+   -d '{"product_id": 1, "quantity": 2}' \
+   https://opendata.website/api/cart/1
+```
 Output:
 ```
 {
@@ -127,13 +158,19 @@ Output:
 }
 ```
 --------------------------------------------------------------------
-`curl --request POST http://opendata.website/api/cart/1/complete`\
+### Complete the cart
+`curl -X POST https://opendata.website/api/cart/1/complete`\
 Output:
 ```
 "Cart 1 completed"
 ```
 --------------------------------------------------------------------
-`curl -d '{"product_id": 1}' -H "Content-Type: application/json" -X DELETE https://opendata.website/api/cart/1`\
+### Delete a product from cart
+```
+curl -X DELETE \
+   -H "Content-Type: application/json" \
+   -d '{"product_id": 1}' httpss://opendata.website/api/cart/1
+```
 Output:
 ```
 "Deleted"
@@ -141,7 +178,7 @@ Output:
 --------------------------------------------------------------------
 
 
-### Security
+## Security
 Security is a significant aspect of every API. Here are the steps that have been made towards making this Online Marketplace API more secure:
 1. Only requests over HTTPS are allowed.
 2. Returns 405 `Method not allowed` if one is using method that is not allowed.
