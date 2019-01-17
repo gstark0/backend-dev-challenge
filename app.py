@@ -162,7 +162,7 @@ def internal_server_error(e):
 
 @app.route('/')
 def main():
-	return 'works'
+	return 'API v1'
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0')
