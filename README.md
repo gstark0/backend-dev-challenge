@@ -107,7 +107,7 @@ Output:
 curl -X PUT \
    -H "Content-Type: application/json" \
    -d '{"price": 449.87}' \
-   httpss://opendata.website/api/products/1
+   https://opendata.website/api/products/1
 ```
 Output:
 ```
@@ -169,7 +169,7 @@ Output:
 ```
 curl -X DELETE \
    -H "Content-Type: application/json" \
-   -d '{"product_id": 1}' httpss://opendata.website/api/cart/1
+   -d '{"product_id": 1}' https://opendata.website/api/cart/1
 ```
 Output:
 ```
