@@ -153,7 +153,7 @@ def page_not_found(e):
 # Handle 405 errors - Method not allowed
 @app.errorhandler(405)
 def method_not_allowed(e):
-	return jsonify('%s method not allowed' % request.method, 405
+	return jsonify('%s method not allowed' % request.method), 405
 
 # Handle 429 errors - Too many requests
 @app.errorhandler(429)
