@@ -45,7 +45,7 @@ Output:
 ```
 --------------------------------------------------------------------
 ### Get a product
-`curl -X GET http://opendata.website/api/products/1`\
+`curl -X GET https://opendata.website/api/products/1`\
 Output:
 ```
 {
@@ -57,7 +57,7 @@ Output:
 ```
 --------------------------------------------------------------------
 ### Get all products
-`curl -X GET http://opendata.website/api/products`\
+`curl -X GET https://opendata.website/api/products`\
 Output:
 ```
 [
@@ -83,7 +83,7 @@ Output:
 ```
 --------------------------------------------------------------------
 ### Get available products
-`curl -X GET http://opendata.website/api/products?available=true`\
+`curl -X GET https://opendata.website/api/products?available=true`\
 Output:
 ```
 [
@@ -107,7 +107,7 @@ Output:
 curl -X PUT \
    -H "Content-Type: application/json" \
    -d '{"price": 449.87}' \
-   https://opendata.website/api/products/1
+   httpss://opendata.website/api/products/1
 ```
 Output:
 ```
@@ -115,21 +115,21 @@ Output:
 ```
 --------------------------------------------------------------------
 ### Delete a product
-`curl -X DELETE http://opendata.website/api/products/1`\
+`curl -X DELETE https://opendata.website/api/products/1`\
 Output:
 ```
 "Deleted"
 ```
 --------------------------------------------------------------------
 ### Delete all products
-`curl -X DELETE http://opendata.website/api/products`\
+`curl -X DELETE https://opendata.website/api/products`\
 Output:
 ```
 "Deleted"
 ```
 --------------------------------------------------------------------
 ### Purchase a product
-`curl -X POST http://opendata.website/api/products/1/purchase`\
+`curl -X POST https://opendata.website/api/products/1/purchase`\
 Output:
 ```
 "Purchased"
@@ -159,7 +159,7 @@ Output:
 ```
 --------------------------------------------------------------------
 ### Complete the cart
-`curl -X POST http://opendata.website/api/cart/1/complete`\
+`curl -X POST https://opendata.website/api/cart/1/complete`\
 Output:
 ```
 "Cart 1 completed"
@@ -169,7 +169,7 @@ Output:
 ```
 curl -X DELETE \
    -H "Content-Type: application/json" \
-   -d '{"product_id": 1}' https://opendata.website/api/cart/1
+   -d '{"product_id": 1}' httpss://opendata.website/api/cart/1
 ```
 Output:
 ```
