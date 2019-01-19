@@ -9,7 +9,7 @@ In order to run the API locally, you need the Python 3.x.x with the following de
 * sqlite3
 * datetime
 
-You can install them via `pip install`.
+You can install them via `pip install`. \
 Before starting the API, you should run `database.py` to create a new database.
 ## Data format
 This API accepts data in JSON only. When sending data, set the `Content-Type` header to `application/json` with JSON body. For example:
